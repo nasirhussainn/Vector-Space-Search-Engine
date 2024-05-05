@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .result-card {
+            margin-bottom: 20px;
+        }
+        .result-title {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .result-title:hover {
+            text-decoration: underline;
+        }
+        .image-container {
+            height: 100%;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        .description {
+            padding-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <form action="/search" method="POST">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search..." name="query">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        <h2>Search Results for "{{ query }}"</h2>
+        <hr>
+        <div class="result-cards">
+            {% if documents %}
+                {% for doc in documents %}
+                <div class="card result-card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8 description">
+                                <h5 class="card-title"><a href="{{ doc.URI }}" class="result-title">{{ doc.Title }}</a></h5>
+                                <p class="card-text description-content">{{ doc.Description | truncate(200, True, '...') }}</p>
+                                <p class="card-text full-description d-none">{{ doc.Description }}</p>
+                                <button class="btn btn-link read-more">Read More</button>
+                                <button class="btn btn-link read-less d-none">Read Less</button>
+                                <small class="text-muted similarity">Similarity: {{ doc.Similarity }}</small>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="image-container">
+                                    {% if doc.Images %}
+                                        {% set image_urls = doc.Images.split() %}
+                                        {% for url in image_urls[:2] %}
+                                            <img src="{{ url }}" alt="Image" class="img-fluid">
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No results found for "{{ query }}"</p>
+            {% endif %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $(".read-more").click(function(){
+                $(this).addClass("d-none");
+                $(this).siblings(".read-less").removeClass("d-none");
+                $(this).closest(".card-body").find(".description-content").addClass("d-none");
+                $(this).closest(".card-body").find(".full-description").removeClass("d-none");
+                $(this).closest(".card-body").find(".similarity").addClass("d-none");
+            });
+
+            $(".read-less").click(function(){
+                $(this).addClass("d-none");
+                $(this).siblings(".read-more").removeClass("d-none");
+                $(this).closest(".card-body").find(".description-content").removeClass("d-none");
+                $(this).closest(".card-body").find(".full-description").addClass("d-none");
+                $(this).closest(".card-body").find(".similarity").removeClass("d-none");
+            });
+        });
+    </script>
+</body>
+</html>

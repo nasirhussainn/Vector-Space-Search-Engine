@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Results Found</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .no-results-container {
+            text-align: center;
+            margin-top: 100px;
+        }
+        .no-results-image {
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="no-results-container">
+            <form action="/search" method="POST">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search..." name="query">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+             <img src="https://media.giphy.com/media/3o7TKRRj7ZZtm3jA9i/giphy.gif" alt="No Results Found" class="no-results-image">
+            <h2>Sorry! No results found.</h2>
+        </div>
+    </div>
+</body>
+</html>
